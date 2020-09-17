@@ -1,0 +1,8 @@
+black
+mypy
+ipython
+md-toc
+pre-commit
+pylint
+pytest-cov
+yamllint
