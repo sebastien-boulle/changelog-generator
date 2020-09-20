@@ -9,6 +9,10 @@ tag_version_re = re.compile(
     "^(?P<major>\d+)-(?P<minor>\d+)-((?P<bug>\d+)|rc(?P<rc>\d+)){0,1}$"
 )
 
+remote_re = re.compile(
+    "^(https://github\.com/|git@github\.com:)(?P<organization>[^/]+)/(?P<repository>[^.]+)(\.git)?$"
+)
+
 
 def isTagVersion(tag: str) -> bool:
     return not not tag_version_re.match(tag)
@@ -26,10 +30,19 @@ def getTagValue(tag: str) -> int:
 
 
 class RepositoryManager:
+    repository: Repo
+    organization: str = ""
+    name: str = ""
+
     def __init__(self, uri: str) -> None:
         self.repository = Repo(uri)
         self.tag_names: List[str] = []
         assert not self.repository.bare
+
+        res = remote_re.match(self.repository.remotes["origin"].url)
+        if res:
+            self.organization = res.group("organization")
+            self.name = res.group("repository")
 
     def getTags(self) -> List[str]:
         if not self.tag_names:
@@ -77,3 +90,9 @@ class RepositoryManager:
             ),
             self.repository.iter_commits(revision, no_merges=True),
         )
+
+    def getOrganization(self) -> str:
+        return self.organization
+
+    def getName(self) -> str:
+        return self.name
