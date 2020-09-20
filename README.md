@@ -117,6 +117,46 @@ Generate the changelog since the last tag
 python3 ./changelog_generator
 ```
 
+## Getting started with github action
+
+To enable the action simply create the
+.github/workflows/release.yml file with the following content:
+
+```yml
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+-[0-9]+-[0-9]+'
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Generate changelog
+        id: generate_changelog
+        uses: sebastien-boulle/changelog-generator@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.generate_changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+```
+
 <!-- ROADMAP -->
 
 ## Roadmap
