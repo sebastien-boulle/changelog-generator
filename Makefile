@@ -4,6 +4,7 @@ VIRTUAL_ENV ?= ./venv
 $(VIRTUAL_ENV): setup.cfg setup.py dev-requirements.txt requirements.txt
 	$(PYTHON) -m venv $(VIRTUAL_ENV)
 	$(VIRTUAL_ENV)/bin/python -m pip install -e . -r dev-requirements.txt
+	$(VIRTUAL_ENV)/bin/python -m pip install -e . -r requirements.txt
 	touch $(VIRTUAL_ENV)  # Update venv mtime to tell make it's up to date
 
 lint: check_format check_imports check_types

@@ -10,7 +10,7 @@ setup(
     url="https://github.com/lumapps/changelog-generator",
     python_requires="~=3.7",
     setup_requires=["wheel"],
-    install_requires=[],
+    install_requires=["gitpython"],
     extras_require={},
     package_data={},
     test_suite="tests",
