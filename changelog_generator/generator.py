@@ -12,9 +12,12 @@ template = Template(
 
 {% for commit in typeNode.commits -%}
 * **{{commit.scope}}**: {{commit.subject}} ([{{commit.short}}](https://github.com/{{organization}}/{{repository}}/commit/{{commit.sha1}}))
-{% endfor %}
-{% endfor %}
-"""
+{%- if commit.jiras|length -%}
+, references:
+{%- for jira in commit.jiras %} [{{jira}}](https://{{organization}}.atlassian.net/browse/{{jira}}) {%- endfor %}
+{%- endif %}
+{% endfor -%}
+{% endfor -%}"""
 )
 
 
