@@ -1,2 +1,3 @@
 wheel
 gitpython
+jinja2
