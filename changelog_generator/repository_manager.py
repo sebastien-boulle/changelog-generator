@@ -1,7 +1,9 @@
 import re
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 from git import Repo
+
+from changelog_generator.commit import Commit
 
 tag_version_re = re.compile(
     "^(?P<major>\d+)-(?P<minor>\d+)-((?P<bug>\d+)|rc(?P<rc>\d+)){0,1}$"
@@ -59,3 +61,19 @@ class RepositoryManager:
             return None
 
         return tags[1]
+
+    def getCommitsSinceLastTag(self) -> Iterable[Commit]:
+        previousTag = self.getPreviousTag()
+        currentTag = self.getCurrentTag() or "HEAD"
+
+        if previousTag:
+            revision = "%s..%s" % (previousTag, currentTag)
+        else:
+            revision = currentTag
+
+        return map(
+            lambda commit: Commit(
+                hexsha=commit.hexsha, summary=commit.summary, message=commit.message
+            ),
+            self.repository.iter_commits(revision, no_merges=True),
+        )
