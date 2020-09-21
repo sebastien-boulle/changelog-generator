@@ -164,9 +164,11 @@ jobs:
 See the [open issues](https://github.com/lumapps/changelog-generator/issues)
 for a list of proposed features (and known issues).
 
-- [ ] list all the commit since the last tag
-- [ ] generate the changelog with a template
-- [ ] group by type and scope
+- [x] list all the commit since the last tag
+- [x] generate the changelog with a template
+- [x] group by type and scope
+- [ ] properly handle rc version
+- [ ] properly handle revert commit
 - [ ] allow hiding some types
 
 <!-- CONTRIBUTING -->
