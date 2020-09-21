@@ -15,7 +15,8 @@ remote_re = re.compile(
 
 
 def isTagVersion(tag: str) -> bool:
-    return not not tag_version_re.match(tag)
+    res = tag_version_re.match(tag)
+    return not not res and not res.group("rc")
 
 
 def getTagValue(tag: str) -> int:
